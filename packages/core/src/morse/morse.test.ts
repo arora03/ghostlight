@@ -201,6 +201,98 @@ describe('Round-Trip Property', () => {
 });
 
 describe('Encoder Edge Cases', () => {
+  describe('Unicode and non-ASCII character handling', () => {
+    it('rejects dotless i "ı" (U+0131) as unsupported', () => {
+      const enc = encodeText('ı');
+      expect(enc).toEqual({
+        ok: false,
+        error: {
+          code: 'UNSUPPORTED_CHARACTERS',
+          characters: [{ char: 'ı', index: 0 }],
+        },
+      });
+    });
+
+    it('rejects long s "ſ" (U+017F) as unsupported', () => {
+      const enc = encodeText('ſ');
+      expect(enc).toEqual({
+        ok: false,
+        error: {
+          code: 'UNSUPPORTED_CHARACTERS',
+          characters: [{ char: 'ſ', index: 0 }],
+        },
+      });
+    });
+
+    it('rejects German eszett "ß" as unsupported', () => {
+      const enc = encodeText('ß');
+      expect(enc).toEqual({
+        ok: false,
+        error: {
+          code: 'UNSUPPORTED_CHARACTERS',
+          characters: [{ char: 'ß', index: 0 }],
+        },
+      });
+    });
+
+    it('rejects fullwidth Latin "Ａ" (U+FF21) as unsupported', () => {
+      const enc = encodeText('Ａ');
+      expect(enc).toEqual({
+        ok: false,
+        error: {
+          code: 'UNSUPPORTED_CHARACTERS',
+          characters: [{ char: 'Ａ', index: 0 }],
+        },
+      });
+    });
+
+    it('rejects non-breaking space U+00A0 between two valid words', () => {
+      const enc = encodeText('HELLO\u00A0WORLD');
+      expect(enc).toEqual({
+        ok: false,
+        error: {
+          code: 'UNSUPPORTED_CHARACTERS',
+          characters: [{ char: '\u00A0', index: 5 }],
+        },
+      });
+    });
+
+    it('rejects zero-width space U+200B as unsupported', () => {
+      const enc = encodeText('A\u200BB');
+      expect(enc).toEqual({
+        ok: false,
+        error: {
+          code: 'UNSUPPORTED_CHARACTERS',
+          characters: [{ char: '\u200B', index: 1 }],
+        },
+      });
+    });
+
+    it('still encodes all lowercase ASCII a-z', () => {
+      const lower = 'abcdefghijklmnopqrstuvwxyz';
+      const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      const encLower = encodeText(lower);
+      const encUpper = encodeText(upper);
+      expect(encLower.ok).toBe(true);
+      expect(encUpper.ok).toBe(true);
+      expect(encLower).toEqual(encUpper);
+    });
+
+    it('reports both bad characters with correct UTF-16 indices when mixing valid text, "ı" and an emoji', () => {
+      const enc = encodeText('AıB😀C');
+      expect(enc).toEqual({
+        ok: false,
+        error: {
+          code: 'UNSUPPORTED_CHARACTERS',
+          characters: [
+            { char: 'ı', index: 1 },
+            { char: '😀', index: 3 },
+          ],
+        },
+      });
+    });
+  });
+
   it('handles lowercase input correctly', () => {
     const enc = encodeText('hello world');
     expect(enc).toEqual({
