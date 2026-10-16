@@ -10,3 +10,4 @@
 8. Dependencies: add a dependency only when the prompt says so. Pin versions. Prefer none.
 9. Naming and style: clear descriptive names, small pure functions, explicit return types on exported functions, JSDoc on every exported symbol.
 10. Commits: conventional commit messages (feat:, fix:, test:, docs:, chore:). Keep commits small.
+11. Git workflow: work on a branch named feat/<topic>, fix/<topic> or docs/<topic>; never commit directly to main; one logical change per commit; never use `git add .` or `git add -A`, stage files explicitly; never stage anything outside the repository's intended files (personal research PDFs and notes stay untracked).
