@@ -23,3 +23,22 @@ export {
   type MalformedSeparatorError,
   type UnknownPatternError,
 } from './morse/decode.js';
+
+export { createPrng } from './prng.js';
+
+export {
+  morseToSegments,
+  totalUnits,
+  unitSecondsFromWpm,
+  type InvalidWpmError,
+  type Segment,
+} from './timing/segments.js';
+
+export {
+  MAX_ENVELOPE_SAMPLES,
+  renderEnvelope,
+  type EnvelopeError,
+  type EnvelopeParams,
+  type InvalidParameterError,
+  type TooLongError,
+} from './timing/envelope.js';
