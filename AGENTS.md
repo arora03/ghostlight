@@ -11,3 +11,4 @@
 9. Naming and style: clear descriptive names, small pure functions, explicit return types on exported functions, JSDoc on every exported symbol.
 10. Commits: conventional commit messages (feat:, fix:, test:, docs:, chore:). Keep commits small.
 11. Git workflow: work on a branch named feat/<topic>, fix/<topic> or docs/<topic>; never commit directly to main; one logical change per commit; never use `git add .` or `git add -A`, stage files explicitly; never stage anything outside the repository's intended files (personal research PDFs and notes stay untracked).
+12. Destructive git commands (reset --hard, clean -f, push --force, branch -D, rebase of already-pushed commits) are forbidden unless the owner explicitly requests them in the prompt. If one seems necessary, stop and ask.
